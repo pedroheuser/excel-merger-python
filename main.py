@@ -2,6 +2,7 @@ import pandas as pd
 import os 
 
 def consolidar_planilhas(diretorio_planilhas, caminho_output):
+    print(f"Verificando o caminho: {diretorio_planilhas}")
     if not os.path.exists(diretorio_planilhas):
         print(f"O diretório {diretorio_planilhas} não existe. Verifique o caminho.")
         return None
@@ -29,6 +30,10 @@ def consolidar_planilhas(diretorio_planilhas, caminho_output):
                 
                 colunas_filtradas = [c for c in colunas.values() if c in df.columns]
                 df_filtrado = df[colunas_filtradas]
+                
+                if "CNPJ" in df_filtrado.columns:
+                    df_filtrado["CNPJ"] = df_filtrado['CNPJ'].astype(str)
+                    df_filtrado["CNPJ"] = df_filtrado['CNPJ'].str.zfill(14)
                 
                 if "Validade do Certificado" in df_filtrado.columns:
                     df_filtrado['Validade do Certificado'] = pd.to_datetime(
